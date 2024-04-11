@@ -9,7 +9,7 @@ import shutil
 
 
 # json 파일 읽기
-with open("/home/happyzion/yomce/fish_coco_dataset/coco.json", "r") as f:
+with open("/home/happyzion/yomce/coco_1.json", "r") as f:
 	raw_coco = json.load(f)
 
 new_coco = copy.deepcopy(raw_coco)
@@ -24,16 +24,18 @@ for ann in raw_coco["annotations"]:
 
 for img in raw_coco["images"]:
     if img["id"] in avail_image_id:
-        file_name = img["file_name"]
-        src = "/home/happyzion/yomce/fish_coco_dataset/train/" + file_name
-        dst = "/home/happyzion/yomce/fish_coco_dataset/images/" + file_name
-        shutil.move(src, dst)
-        new_images.append(img)
-        
+        try:
+            file_name = img["file_name"]
+            src = "/home/happyzion/yomce/fish_coco_dataset/background/" + file_name
+            dst = "/home/happyzion/yomce/fish_coco_dataset/images/" + file_name
+            shutil.move(src, dst)
+            new_images.append(img)
+        except:
+            print(f"{src}파일이 없습니다")
         
 del new_coco["images"]
 
 new_coco["images"] = new_images
 
-with open("/home/happyzion/yomce/result_2.json", 'w') as outfile:
+with open("/home/happyzion/yomce/coco_2.json", 'w') as outfile:
     json.dump(new_coco, outfile, indent=4)
